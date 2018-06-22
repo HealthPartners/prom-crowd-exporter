@@ -14,8 +14,8 @@ import com.atlassian.crowd.event.user.UserAuthenticationFailedInvalidAuthenticat
 import com.atlassian.crowd.event.user.UserCreatedEvent;
 import com.atlassian.crowd.event.user.UserCredentialUpdatedEvent;
 import com.atlassian.crowd.event.user.UserCredentialValidationFailed;
+import com.atlassian.crowd.event.user.UserDeletedEvent;
 import com.atlassian.crowd.event.user.UserUpdatedEvent;
-import com.atlassian.crowd.event.user.UsersDeletedEvent;
 import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
@@ -136,10 +136,11 @@ public class MetricsListener {
     }
 
     @EventListener
-    public void onUserDeletedEvent(UsersDeletedEvent usersDeletedEvent) {
-        String directory = usersDeletedEvent.getDirectory().getName();
-
-        usersDeletedEvent.getUsernames().forEach(username -> metricCollector.userDeleteCounter(directory,username));
+    public void onUserDeletedEvent(UserDeletedEvent userDeletedEvent) {
+        metricCollector.userDeleteCounter(
+                userDeletedEvent.getDirectory().getName(),
+                userDeletedEvent.getUsername()
+        );
     }
 
     @EventListener

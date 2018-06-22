@@ -42,7 +42,7 @@ atlas-mvn package
 
 1. Build the plugin using `atlas-mvn package`
 1. Shut down your Crowd instance.
-1. Go to CROWD-HOME/crowd-webapp/WEB-INF/lib directory, remove previous versions of the plugin (if any), and copy the downloaded JAR there.
+1. Go to crowd.home/plugins directory (You configured crowd.home in crowd-webapp/WEB-INF/classes/crowd-init.properties when installing Crowd), remove previous versions of the plugin (if any), and copy the downloaded JAR there.
 1. Start Crowd.
 1. **Prometheus Exporter For Crowd** add-on should be now correctly installed and you can access via your browser at CROWD-HOSTNAME/crowd/plugins/servlet/prometheus/metrics
 

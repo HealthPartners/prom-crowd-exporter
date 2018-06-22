@@ -209,8 +209,8 @@
         </plugins>
     </build>
     <properties>
-        <crowd.version>3.1.2</crowd.version>
-        <crowd.data.version>3.1.2</crowd.data.version>
+        <crowd.version>2.11.0</crowd.version>
+        <crowd.data.version>2.11.0</crowd.data.version>
         <amps.version>6.3.15</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
