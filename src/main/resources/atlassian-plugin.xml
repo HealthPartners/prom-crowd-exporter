@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+  <plugin-info>
+    <description>${project.description}</description>
+    <version>${project.version}</version>
+    <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    <param name="plugin-icon">images/pluginIcon.png</param>
+    <param name="plugin-logo">images/pluginLogo.png</param>
+  </plugin-info>
+  <!-- add our i18n resource -->
+  <resource type="i18n" name="i18n" location="prom-crowd-exporter"/>
+  <!-- add our web resources -->
+  <web-resource key="prom-crowd-exporter-resources" name="prom-crowd-exporter Web Resources">
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <resource type="download" name="prom-crowd-exporter.css" location="/css/prom-crowd-exporter.css"/>
+    <resource type="download" name="prom-crowd-exporter.js" location="/js/prom-crowd-exporter.js"/>
+    <resource type="download" name="images/" location="/images"/>
+    <context>prom-crowd-exporter</context>
+  </web-resource>
+  <!-- Servlets -->
+  <servlet name="Prometheus Exporter" i18n-name-key="prometheus-exporter.name" key="prometheus-exporter" class="com.healthpartners.atlas.plugins.servlet.PrometheusExporter">
+    <description key="prometheus-exporter.description">This servlet exposes metrics to prometheus.</description>
+    <url-pattern>/prometheus/metrics</url-pattern>
+  </servlet>
+</atlassian-plugin>
