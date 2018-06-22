@@ -1,5 +1,7 @@
 # Prometheus Exporter For Crowd 
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/a6ffbd7f929997c28b9c/maintainability)](https://codeclimate.com/github/HealthPartners/prom-crowd-exporter)[![Build Status](https://api.travis-ci.org/HealthPartners/prom-crowd-exporter.svg?branch=master)](https://travis-ci.org/HealthPartners/prom-crowd-exporter/)
+
 [![MIT License](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
 
 This is Crowd plugin which provides endpoint to expose Crowd metrics to Prometheus.
