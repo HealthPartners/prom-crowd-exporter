@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.healthpartners.atlas.plugins</groupId>
     <artifactId>prom-crowd-exporter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <organization>
         <name>HealthPartners</name>
         <url>https://www.healthpartners.com/</url>
     </organization>
     <name>Prometheus Exporter For Crowd</name>
-    <description>This is the com.healthpartners.atlas.plugins:prom-crowd-exporter plugin for Atlassian Crowd.</description>
+    <description>This plugin for Atlassian Crowd provides endpoint to export metrics to prometheus.</description>
     <packaging>atlassian-plugin</packaging>
     <dependencyManagement>
         <dependencies>
