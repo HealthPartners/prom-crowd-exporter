@@ -4,6 +4,7 @@ import io.prometheus.client.Collector;
 
 public interface MetricCollector {
     Collector getCollector();
+
     void allPasswordsExpireCounter(String directory);
     void directoryCreateCounter(String directory);
     void directoryDeleteCounter(String directory);
