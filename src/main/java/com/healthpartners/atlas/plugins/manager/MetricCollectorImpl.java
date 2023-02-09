@@ -1,5 +1,6 @@
 package com.healthpartners.atlas.plugins.manager;
 
+import com.atlassian.crowd.manager.property.PropertyManager;
 import com.atlassian.crowd.service.license.LicenseService;
 import com.atlassian.extras.api.crowd.CrowdLicense;
 import com.atlassian.plugin.spring.scanner.annotation.export.ExportAsService;
@@ -20,12 +21,15 @@ import java.util.List;
 public class MetricCollectorImpl extends Collector implements MetricCollector {
     private static final Logger log = LoggerFactory.getLogger(MetricCollectorImpl.class);
 
+    private final PropertyManager propertyManager;
     private final LicenseService licenseService;
     private final ScheduledMetricEvaluator scheduledMetricEvaluator;
 
     @Autowired
     public MetricCollectorImpl(
+            @ComponentImport PropertyManager propertyManager,
             @ComponentImport LicenseService licenseService, ScheduledMetricEvaluator scheduledMetricEvaluator) {
+        this.propertyManager = propertyManager;
         this.licenseService = licenseService;
         this.scheduledMetricEvaluator = scheduledMetricEvaluator;
     }
@@ -35,10 +39,14 @@ public class MetricCollectorImpl extends Collector implements MetricCollector {
             .help("Maintenance Expiry Days Gauge")
             .create();
 
-//    private final Gauge allUsersGauge = Gauge.build()
-//            .name("crowd_all_users_gauge")
-//            .help("All Users Gauge")
-//            .create();
+    private final Gauge licenseExpiryDaysGauge = Gauge.build()
+            .name("crowd_license_expiry_days_gauge")
+            .help("License Expiry Days Gauge")
+            .create();
+    private final Gauge allowedUsersGauge = Gauge.build()
+            .name("crowd_allowed_users_gauge")
+            .help("Allowed Users Gauge")
+            .create();
 
     private final Gauge activeUsersGauge = Gauge.build()
             .name("crowd_active_users_gauge")
@@ -228,17 +236,10 @@ public class MetricCollectorImpl extends Collector implements MetricCollector {
 
     @Override
     public List<Collector.MetricFamilySamples> collect() {
-        CrowdLicense crowdLicense = licenseService.getLicense();
-        if (crowdLicense != null) {
-            log.debug("License info: {}", crowdLicense);
-            maintenanceExpiryDaysGauge.set(crowdLicense.getNumberOfDaysBeforeMaintenanceExpiry());
-            activeUsersGauge.set(crowdLicense.getMaximumNumberOfUsers());
-//            allUsersGauge.set(licenseService.);
-        }
-
         List<Collector.MetricFamilySamples> result = new ArrayList<>();
-        result.addAll(maintenanceExpiryDaysGauge.collect());
-//        result.addAll(allUsersGauge.collect());
+
+        activeUsersGauge.set(propertyManager.getCurrentLicenseResourceTotal());
+
         result.addAll(activeUsersGauge.collect());
         result.addAll(allPasswordsExpiredCounter.collect());
         result.addAll(directoryCreateCounter.collect());
@@ -256,6 +257,19 @@ public class MetricCollectorImpl extends Collector implements MetricCollector {
         result.addAll(userUpdateCounter.collect());
         result.addAll(userCredentialUpdateCounter.collect());
         result.addAll(userCredentialValidationFailCounter.collect());
+
+        CrowdLicense crowdLicense = licenseService.getLicense();
+        if (crowdLicense != null) {
+            log.debug("License info: {}", crowdLicense);
+            licenseExpiryDaysGauge.set(crowdLicense.getNumberOfDaysBeforeExpiry());
+            maintenanceExpiryDaysGauge.set(crowdLicense.getNumberOfDaysBeforeMaintenanceExpiry());
+            allowedUsersGauge.set(crowdLicense.getMaximumNumberOfUsers());
+
+            result.addAll(maintenanceExpiryDaysGauge.collect());
+            result.addAll(licenseExpiryDaysGauge.collect());
+            result.addAll(allowedUsersGauge.collect());
+        }
+
         return result;
     }
 }
